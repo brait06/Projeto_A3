@@ -5,96 +5,88 @@
 package com.mycompany.projeto_a3;
 
 public abstract class Tabuleiro {
-    protected char[][] campo;
-    private int tamanhoX = 10;
+    protected char[][] campo; // protected → visível para classes filhas // char[][] → matriz de caracteres
+    private int tamanhoX = 10; // private → só essa classe acesso // int → número inteiro
     private int tamanhoY = 10;
 
-    public Tabuleiro(int tamanhoX, int tamanhoY) {
-        campo = new char[tamanhoX][tamanhoY];
+    public Tabuleiro(int tamanhoX, int tamanhoY) { // construtor com dois ints (tamanhos)
+        campo = new char[tamanhoX][tamanhoY]; // new char[][] → cria matriz nova na memória
     }
 
-    public int gettamanhoX() { return tamanhoX; }
+    public int gettamanhoX() { return tamanhoX; } // return → devolve o valor
     public int gettamanhoY() { return tamanhoY; }
 
-    public char[][] getcampo() { return campo; }
+    public char[][] getcampo() { return campo; } // retorna a matriz inteira
 
-    abstract void inicio();
+    abstract void inicio(); // abstract void → método sem corpo, classe filha deve implementar
 
-    public boolean Status_do_navio() {
-        for (int i = 0; i < tamanhoX; i++) {
-            for (int j = 0; j < tamanhoY; j++) {
-                if (campo[i][j] == 'N') {
-                    return true;
+    public boolean Status_do_navio() { // boolean → retorna true ou false
+        for (int i = 0; i < tamanhoX; i++) { // for → laço que repete; i = 0 → início; i < tamanhoX →  condição para continuar; i++ → incrementa 1
+            for (int j = 0; j < tamanhoY; j++) {  // segundo for → percorre colunas
+                if (campo[i][j] == 'N') {  // if → verifica condição
+                    return true; // return true → navio encontrado
                 }
             }
         }
-        return false;
+        return false; // return false → nenhum navio encontrado
     }
 }
 
 class MeuTabuleiro extends Tabuleiro {
 
     public MeuTabuleiro(int tamanhoX, int tamanhoY) {
-        super(tamanhoX, tamanhoY);
+        super(tamanhoX, tamanhoY); // super → chama o construtor da classe mãe
     }
 
-    @Override
-    void inicio() {
-        for (int i = 0; i < gettamanhoX(); i++) {
-            for (int j = 0; j < gettamanhoY(); j++) {
-                campo[i][j] = '~';
+    @Override // @Override → indica que um método está substituindo o da classe mãe
+    void inicio() { // void → não retorna nada
+        for (int i = 0; i < gettamanhoX(); i++) { // for → percorre cada linha
+            for (int j = 0; j < gettamanhoY(); j++) { // segundo for → percorre colunas
+                campo[i][j] = '~'; // char → armazena um único caractere
             }
         }
     }
 
     public boolean posicaoDisponivel(int linha, int coluna) {
-        return campo[linha][coluna] == '~';
+        return campo[linha][coluna] == '~'; // return → devolve comparação (true/false)
     }
 
     public boolean posicionarN(int linha, int coluna) {
-        return campo[linha][coluna] == 'N';
+        return campo[linha][coluna] == 'N'; // verifica se já tem navio
     }
 
-    public void mostrarTabuleiro(boolean mostrarNavios) {
-        System.out.printf("«⛴..│ 1");
-
-        for (int i = 2; i <= gettamanhoY(); i++) {
-            System.out.printf("░%1d", i);
-        }
-        System.out.println(" │..⛴»");
-
-
-        // Corpo do tabuleiro com letras à esquerda e à direita
+    public void mostrarTabuleiro(boolean mostrarNavios) { // boolean → controla visibilidade
         for (int i = 0; i < gettamanhoX(); i++) {
-            char letra = (char)('A' + i);
-            System.out.printf(" %2c ¦░", letra); // Letra à esquerda
-
-            for (int j = 0; j < gettamanhoY(); j++) {
-                char celula = campo[i][j];
-                if (!mostrarNavios && celula == 'N') {
-                    System.out.print(" ~");
+            for (int j = 0; j < gettamanhoY(); j++) { // for → laço que repete
+                // int → tipo inteiro usado no contador
+                // i → contador do laço que controla as linhas
+                // i = 0 → começa do zero
+                // i < gettamanhoX() → repete enquanto i for menor que o tamanho
+                // i++ → aumenta 1 a cada repetição
+                if (!mostrarNavios && campo[i][j] == 'N') {  // ! → negação ("não")
+                    System.out.print("~ "); 
                 } else {
-                    System.out.printf(" %c", celula);
+                    System.out.print(campo[i][j] + " ");
                 }
             }
-
-            System.out.printf(" ░¦%2c%n", letra); // Letra à direita
+            System.out.println();
         }
     }
+}
 
-class TabuleiroInimigo extends Tabuleiro {
+class TabuleiroInimigo extends Tabuleiro { // extends → herança
 
     public TabuleiroInimigo(int tamanhoX, int tamanhoY) {
-        super(tamanhoX, tamanhoY);
+        super(tamanhoX, tamanhoY); // super → chama construtor da classe mãe
     }
 
+
     @Override
-    void inicio() {
+    void inicio() { // mesmo comportamento da outra classe
         for (int i = 0; i < gettamanhoX(); i++) {
             for (int j = 0; j < gettamanhoY(); j++) {
                 campo[i][j] = '~';
             }
         }
     }
-}
 }
